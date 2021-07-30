@@ -5,8 +5,12 @@ import Login from './Login';
 import UploudPhoto from './UploudPhoto';
 import Doctor from './Doctor';
 import Messages from './Messages';
-import Hospitals from './Hospitals'
-
+import Hospitals from './Hospitals';
+import ChooseDoctor from './ChooseDoctor';
+import Chatting from './Chat';
+import UserProfile from './UserProfile';
+import UpdateProfile from './UpdateProfile';
+import DoctorProfile from './DoctorProfile';
 export {
     Splash, 
     GetStarted, 
@@ -15,5 +19,10 @@ export {
     UploudPhoto, 
     Doctor, 
     Messages, 
-    Hospitals
+    Hospitals,
+    ChooseDoctor,
+    Chatting,
+    UserProfile,
+    DoctorProfile,
+    UpdateProfile
 };
