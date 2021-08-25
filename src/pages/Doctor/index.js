@@ -13,7 +13,6 @@ import { fonts, colors } from '../../utils'
 const Doctor = ({navigation}) => {
     return (
       <>
-        <StatusBar barStyle = "light-content" translucent={true} backgroundColor={colors.white} hidden={false} />
         <ScrollView style={styles.scrollPage} showsVerticalScrollIndicator={false}>
           <View style={styles.content}>
             <View style={styles.wrapperSection}>

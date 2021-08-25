@@ -4,7 +4,7 @@ import { Header, Button, Link, Gap } from '../../components'
 import { ILNullPhoto, IconAddPhoto } from '../../assets'
 import { colors, fonts } from '../../utils'
 
-const UploudPhoto = () => {
+const UploudPhoto = ({navigation}) => {
     return (
         <View style={styles.page}>
             <Header title="Uploud Photo" />
@@ -18,9 +18,9 @@ const UploudPhoto = () => {
                     <Text style={styles.profession}>Product Designer</Text>
                 </View>
                 <View>
-                    <Button title="Uploud and Continue" />
+                    <Button title="Uploud and Continue" onPress={() => navigation.replace('MainApp')}/>
                     <Gap height={30} />
-                    <Link title="Skip for this" align="center" size={16}/>
+                    <Link title="Skip for this" align="center" size={16} onPress={() => navigation.replace('MainApp')}/>
                 </View>
             </View>
         </View>

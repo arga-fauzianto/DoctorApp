@@ -1,16 +1,34 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import {Header} from '../../components';
+import { Button ,Gap,Header, Profile, ProfileItem} from '../../components';
+import { colors } from '../../utils';
 
-const DoctorProfile = () => {
+const DoctorProfile = ({ navigation }) => {
   return (
-    <View>
-      <Header title="Doctor Profile"/>
-      <Text>Doctor Profile page</Text>
+    <View style={styles.page}>
+      <Header title="Doctor Profile" onPress={() => navigation.goBack() }/>
+      <Profile name="Nairoby Putri Hayza" desc="Dokter Anak"/>
+      <Gap height={10}/>
+      <ProfileItem label="Alumnus" value="Universitas Indonesia, 2020"/>
+      <ProfileItem label="Tempat Praktik" value="Rumah Sakit Umum Tangerang"/>
+      <ProfileItem label="No, STR" value="00011622081996"/>
+      <Gap height={23}/>
+      <View style={styles.action}>
+        <Button title="Start Consultation" onPress={() => navigation.navigate('Messages')} />
+      </View>
     </View>
   )
 }
 
 export default DoctorProfile
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  page: {
+    backgroundColor: colors.white,
+    flex: 1
+  },
+  action: {
+    paddingHorizontal: 40,
+    paddingTop: 23
+  }
+})

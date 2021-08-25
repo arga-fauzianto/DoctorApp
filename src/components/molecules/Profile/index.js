@@ -3,12 +3,13 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import { DummyUser, IconRemovePhoto } from '../../../assets'
 import { colors, fonts } from '../../../utils'
 
-const Profile = ({name, desc}) => {
+const Profile = ({name, desc, isRemove}) => {
     return (
         <View style={styles.container}>
             <View style={styles.borderProfile}>
                 <Image source={DummyUser} style={styles.avatar}/>
-                <IconRemovePhoto style={styles.removePhoto} />
+                {isRemove && <IconRemovePhoto style={styles.removePhoto} /> }
+                
             </View>
             {
               name && (
@@ -26,9 +27,9 @@ export default Profile
 
 const styles = StyleSheet.create({
     avatar: {
-        width: 110,
-        height: 110,
-        borderRadius: 110 / 2
+        width: 130,
+        height: 130,
+        borderRadius: 130 / 2
     },
     borderProfile: {
         width: 130,
@@ -43,12 +44,14 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     name: {
+        textAlign: 'center',
         fontSize: 20,
         fontFamily: fonts.primary[600],
         color: colors.text.primary,
         marginTop: 16
     },
     profession: {
+        textAlign: 'center',
         fontSize: 16,
         fontFamily: fonts.primary[600],
         color: colors.text.secondary,
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
     },
     removePhoto: {
       position: 'absolute',
-      right: 8,
-      bottom: 8
+      right: 10,
+      bottom: 2,
     }
 })
