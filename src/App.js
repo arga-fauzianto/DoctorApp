@@ -3,6 +3,7 @@ import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Router from './navigation';
 import { colors } from './utils'
+import FlashMessage from "react-native-flash-message"
 
 
 
@@ -13,6 +14,7 @@ const App = () => {
    <NavigationContainer>
      <Router />
    </NavigationContainer>
+   <flashMessage position="top" />
   </> 
   )
 }
