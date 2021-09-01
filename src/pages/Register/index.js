@@ -30,6 +30,16 @@ const Register = ({navigation}) => {
             // Signed in
             setLoading(false)
             setForm('reset')
+
+            const data = {
+                fullName: form.fullName,
+                profession: form.profession,
+                email: form.email
+            }
+
+            Fire.database()
+            .ref('users/' +success.user.uid+ '/' )
+            .set(data)
             const user = userCredential.user;
             console.log('register succsess:', userCredential);
           })
