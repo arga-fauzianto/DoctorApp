@@ -1,27 +1,52 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { TouchableOpacity, StyleSheet, Text, View, Image } from 'react-native'
 import { Header, Button, Link, Gap } from '../../components'
 import { ILNullPhoto, IconAddPhoto, IconRemovePhoto } from '../../assets'
 import { colors, fonts } from '../../utils'
+import * as ImagePicker from "react-native-image-picker"
+import {showMessage} from 'react-native-flash-message'
+
+
 
 const UploudPhoto = ({navigation}) => {
     const [hasPhoto, setHasPhoto] = useState(false)
+    const [photo, setPhoto] = useState(ILNullPhoto)
+    const getImage = () => {
+        ImagePicker.launchImageLibrary({}, response => {
+            console.log('response: ', response)
+            if(response.didCancel || response.error) {
+                showMessage({
+                    message: 'oops, anda tidak memilih photo',
+                    type: 'default',
+                    backgroundColor: colors.error,
+                    color: colors.white,
+                    // hideStatusBar: true
+                    
+                })
+            }else{
+                const source = {uri: response.uri, includeBase64: true}
+                setPhoto(source)
+                setHasPhoto(true)
+            }
+            
+        })
+        
+    }
     return (
         <View style={styles.page}>
             <Header title="Uploud Photo" />
             <View style={styles.content}>
                 <View style={styles.profile}>
-                    <View style={styles.AvatarWrapper}>
-                        <Image source={ILNullPhoto} style={styles.avatar}/>
+                    <TouchableOpacity style={styles.AvatarWrapper} onPress={getImage}>
+                        <Image source={photo} style={styles.avatar}/>
                         {hasPhoto && <IconRemovePhoto style={styles.addPhoto}/>}
                         {!hasPhoto && <IconAddPhoto style={styles.addPhoto}/>}
-                        
-                    </View>
+                    </TouchableOpacity>
                     <Text style={styles.name}>Shayna Melinda</Text>
                     <Text style={styles.profession}>Product Designer</Text>
                 </View>
                 <View>
-                    <Button title="Uploud and Continue" onPress={() => navigation.replace('MainApp')}/>
+                    <Button disable={!hasPhoto} title="Uploud and Continue" onPress={() => navigation.replace('MainApp')}/>
                     <Gap height={30} />
                     <Link title="Skip for this" align="center" size={16} onPress={() => navigation.replace('MainApp')}/>
                 </View>
@@ -40,20 +65,21 @@ const styles = StyleSheet.create({
     avatar: {
         width: 110,
         height: 110,
+        borderRadius: 110 / 2
     },
     AvatarWrapper: {
-        width: 130,
-        height:130,
+        width: 110,
+        height:110,
         borderWidth: 1,
         borderColor: colors.border,
-        borderRadius: 130 / 2,
+        borderRadius: 110 / 2,
         alignItems: 'center',
         justifyContent: 'center'
     },
     addPhoto: {
         position: 'absolute',
-        bottom: 8,
-        right: 6
+        bottom: 3,
+        right: 3
     },
     name: {
         fontSize: 24,

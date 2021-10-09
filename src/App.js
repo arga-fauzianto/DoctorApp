@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatusBar } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Router from './navigation';
 import { colors } from './utils'
@@ -14,9 +14,18 @@ const App = () => {
    <NavigationContainer>
      <Router />
    </NavigationContainer>
-   <flashMessage position="top" />
+   <FlashMessage position="top" style={styles.showMessage}/>
   </> 
   )
 }
 
 export default App
+
+const styles = StyleSheet.create({
+  showMessage: {
+    padding: 5,
+    marginTop: 15,
+    textAlign: 'center'
+  },
+  titleStyle: {top: 5},
+})

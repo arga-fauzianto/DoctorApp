@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { colors, fonts } from '../../../utils'
 import IconOnly from './IconOnly'
 import BtnIconSend from './BtnIconSend'
