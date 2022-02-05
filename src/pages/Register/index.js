@@ -3,8 +3,11 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { Header, Input, Button, Gap, Loading } from '../../components'
 import { colors, useForm } from '../../utils'
 import {Fire} from '../../config'
+import auth from '@react-native-firebase/auth';
+
+import { getDatabase, ref, set } from "firebase/database";
 import { showMessage, hideMessage } from 'react-native-flash-message'
-import { color } from 'react-native-reanimated'
+
 
 const Register = ({navigation}) => {
     // const [fullName, setFullName] = useState('');
@@ -24,38 +27,40 @@ const Register = ({navigation}) => {
     const onContinue = () => {
         console.log(form);
         setLoading(true)
-        Fire.auth()
-        .createUserWithEmailAndPassword(form.email, form.password)
-        .then((userCredential) => {
-            // Signed in
-            setLoading(false)
-            setForm('reset')
-
-            const data = {
-                fullName: form.fullName,
-                profession: form.profession,
-                email: form.email
-            }
-
-            Fire.database()
-            .ref('users/' +success.user.uid+ '/' )
-            .set(data)
-            const user = userCredential.user;
-            console.log('register succsess:', userCredential);
-          })
-  .catch(error => {
-        setLoading(false)
-        const errorMessage = error.message;
-        showMessage({
-            message: errorMessage,
-            type: 'default',
-            backgroundColor: colors.error,
-            color: colors.white
-        })
-  });
-        // () => navigation.navigate('UploudPhoto')
-    }
-
+         auth(Fire)
+         .createUserWithEmailAndPassword( form.email, form.password)
+         .then(( success) => {
+           console.log('register berhasil: ', success);
+         })
+         .catch(error => {
+           if (error.code === 'auth/email-already-in-use') {
+             console.log('That email address is already in use!');
+           }
+       
+           if (error.code === 'auth/invalid-email') {
+             console.log('That email address is invalid!');
+           }
+       
+           console.error(error);
+         });
+    
+            const db = getDatabase();
+            set(ref(db, 'users/' + success.user.uid + '/'), {data});
+        }
+        // .catch(error => {
+        //     const errorMessage = error.message;
+        //     setLoading(false);
+        //     showMessage({
+        //       message: errorMessage,
+        //       type: 'default',
+        //       backgroundColor: colors.error,
+        //       color: colors.white,
+        //     });
+        //     console.log('error: ', error);
+        //     // ..
+        //   });
+        // }
+              
     return (
         <>
          <View style= {styles.page}>
@@ -94,9 +99,8 @@ const Register = ({navigation}) => {
          {loading && <Loading />} 
         </> 
     )
-}
-
-export default Register
+    }    
+export default Register;
 
 const styles = StyleSheet.create({
     page: {
