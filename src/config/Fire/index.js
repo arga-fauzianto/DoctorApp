@@ -1,13 +1,15 @@
-import * as firebase from 'firebase'
+import firebase from 'firebase'
 
-firebase.initializeApp({
-  apiKey: "AIzaSyC6yhLNMRuAkb0HabSI1s1myw0h94wTePQ",
-  authDomain: "doctor-app-01-74672.firebaseapp.com",
-  projectId: "doctor-app-01-74672",
-  storageBucket: "doctor-app-01-74672.appspot.com",
-  messagingSenderId: "810202910987",
-  appId: "1:810202910987:web:e70e84465d4b0c1b17120e"
+firebase.initializeApp  ({
+  apiKey: "AIzaSyAX-6wqH2KUVCnPuuBThRTkL27L4TieVtA",
+  authDomain: "my-doctor-12d27.firebaseapp.com",
+  projectId: "my-doctor-12d27",
+  storageBucket: "my-doctor-12d27.appspot.com",
+  messagingSenderId: "838022038952",
+  appId: "1:838022038952:web:beb6c0b2871d445e5d099d"
+
 });
+ 
 
 const Fire = firebase;
 

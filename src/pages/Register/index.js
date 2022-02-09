@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { Header, Input, Button, Gap, Loading } from '../../components'
-import { colors, useForm } from '../../utils'
+import { colors, storeData, useForm } from '../../utils'
 import {Fire} from '../../config'
-import auth from '@react-native-firebase/auth';
 
-import { getDatabase, ref, set } from "firebase/database";
 import { showMessage, hideMessage } from 'react-native-flash-message'
 
 
@@ -15,6 +13,7 @@ const Register = ({navigation}) => {
     // const [email, setEmail] = useState('');
     // const [password, setPassword] = useState('');
 
+    const [loading, setLoading] = useState(false)
     const [form, setForm] = useForm({
         fullName: '',
         profession: '',
@@ -22,31 +21,44 @@ const Register = ({navigation}) => {
         password: ''
     })
 
-    const [loading, setLoading] = useState(false)
+   
 
     const onContinue = () => {
         console.log(form);
+        
         setLoading(true)
-         auth(Fire)
-         .createUserWithEmailAndPassword( form.email, form.password)
-         .then(( success) => {
-           console.log('register berhasil: ', success);
-         })
-         .catch(error => {
-           if (error.code === 'auth/email-already-in-use') {
-             console.log('That email address is already in use!');
-           }
-       
-           if (error.code === 'auth/invalid-email') {
-             console.log('That email address is invalid!');
-           }
-       
-           console.error(error);
-         });
-    
-            const db = getDatabase();
-            set(ref(db, 'users/' + success.user.uid + '/'), {data});
-        }
+        Fire.auth().createUserWithEmailAndPassword(form.email, form.password)
+        .then((success) => {
+            setLoading(false)
+            setForm('reset')
+            const data = {
+                fullName: form.fullName,
+                profession: form.profession,
+                email: form.email,
+                uid: success.user.uid
+            }
+            Fire.database().ref('users/' +success.user.uid+ '/')
+            .set(data)
+            storeData('user', data);
+            navigation.navigate('UploudPhoto', data);
+           console.log('register success:', success)    
+        })
+        .catch((error) => {
+            const errorMessage= error.message;
+            setLoading(false)
+            showMessage({
+                message: errorMessage,
+                type: 'default',
+                backgroundColor: colors.error,
+                 color: colors.white,
+
+            })
+            console.log('error: ', error)
+        });
+
+    }
+   
+ 
         // .catch(error => {
         //     const errorMessage = error.message;
         //     setLoading(false);

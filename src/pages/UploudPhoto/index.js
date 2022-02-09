@@ -2,17 +2,21 @@ import React, { useState } from 'react'
 import { TouchableOpacity, StyleSheet, Text, View, Image } from 'react-native'
 import { Header, Button, Link, Gap } from '../../components'
 import { ILNullPhoto, IconAddPhoto, IconRemovePhoto } from '../../assets'
-import { colors, fonts } from '../../utils'
-import * as ImagePicker from "react-native-image-picker"
+import { colors, fonts, storeData } from '../../utils'
+import {launchImageLibrary} from "react-native-image-picker"
 import {showMessage} from 'react-native-flash-message'
+import { Fire } from '../../config'
 
 
 
-const UploudPhoto = ({navigation}) => {
+const UploudPhoto = ({navigation, route}) => {
+    const {fullName, profession, uid} = route?.params || {};
+    const [photoDB, setPhotoDB] = useState('');
     const [hasPhoto, setHasPhoto] = useState(false)
     const [photo, setPhoto] = useState(ILNullPhoto)
     const getImage = () => {
-        ImagePicker.launchImageLibrary({}, response => {
+        launchImageLibrary(
+            {quality: 0.5, maxHeight: 200, maxWidth: 200, includeBase64:true}, response => {
             console.log('response: ', response)
             if(response.didCancel || response.error) {
                 showMessage({
@@ -24,7 +28,9 @@ const UploudPhoto = ({navigation}) => {
                     
                 })
             }else{
-                const source = {uri: response.uri, includeBase64: true}
+                console.log('response getImage: ', response);
+                const source = {uri: response.uri}
+                setPhotoDB(`data:${response.type};base64, ${response.base64}`);
                 setPhoto(source)
                 setHasPhoto(true)
             }
@@ -32,6 +38,19 @@ const UploudPhoto = ({navigation}) => {
         })
         
     }
+    const UploudContinue = () => {
+        Fire.database().ref('users/' + uid + '/')
+        .update({photo: photoDB});
+
+        const data = route.params;
+        data.photo = photoDB;
+
+        storeData('user', data);
+
+
+        navigation.replace('MainApp')
+    }
+
     return (
         <View style={styles.page}>
             <Header title="Uploud Photo" />
@@ -42,13 +61,13 @@ const UploudPhoto = ({navigation}) => {
                         {hasPhoto && <IconRemovePhoto style={styles.addPhoto}/>}
                         {!hasPhoto && <IconAddPhoto style={styles.addPhoto}/>}
                     </TouchableOpacity>
-                    <Text style={styles.name}>Shayna Melinda</Text>
-                    <Text style={styles.profession}>Product Designer</Text>
+                    <Text style={styles.name}>{fullName}</Text>
+                    <Text style={styles.profession}>{profession}</Text>
                 </View>
                 <View>
-                    <Button disable={!hasPhoto} title="Uploud and Continue" onPress={() => navigation.replace('MainApp')}/>
+                    <Button disable={!hasPhoto} title="Uploud and Continue" onPress={UploudContinue}/>
                     <Gap height={30} />
-                    <Link title="Skip for this" align="center" size={16} onPress={() => navigation.replace('MainApp')}/>
+                    <Link title="Skip for this" align="center" size={16} />
                 </View>
             </View>
         </View>

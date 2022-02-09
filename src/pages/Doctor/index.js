@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View, ScrollView, StatusBar } from 'react-native'
 import { 
   HomeProfile, 
@@ -8,9 +8,14 @@ import {
   Gap 
 } from '../../components'
 import {JSONCategoryDoctor, DummyDoctor1, DummyDoctor2, DummyDoctor3} from '../../assets'
-import { fonts, colors } from '../../utils'
+import { fonts, colors, getData } from '../../utils'
 
 const Doctor = ({navigation}) => {
+  useEffect(() => {
+    getData('user').then(res => {
+      console.log(res);
+    })
+  }, [])
     return (
       <>
         <ScrollView style={styles.scrollPage} showsVerticalScrollIndicator={false}>
