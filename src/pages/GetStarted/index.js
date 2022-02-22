@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
 
+
 //assets
 
 import {ILLogo, ILGetStarted} from '../../assets'

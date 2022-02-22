@@ -5,9 +5,14 @@ import Router from './navigation';
 import { colors } from './utils'
 import FlashMessage from "react-native-flash-message"
 
+// redux
+
+import {Provider} from 'react-redux';
+import store from './redux/store';
 
 
-const App = () => {
+const MainApp = () => {
+  
   return (
   <> 
   <StatusBar barStyle = "dark-content" translucent={true} backgroundColor={colors.white} hidden={false} /> 
@@ -16,6 +21,14 @@ const App = () => {
    </NavigationContainer>
    <FlashMessage position="top" style={styles.showMessage}/>
   </> 
+  )
+}
+
+const App = () => {
+  return (
+    <Provider store={store}>
+      <MainApp />
+    </Provider>
   )
 }
 

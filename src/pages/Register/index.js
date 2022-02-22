@@ -1,19 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import { Header, Input, Button, Gap, Loading } from '../../components'
-import { colors, storeData, useForm } from '../../utils'
+import { Header, Input, Button, Gap} from '../../components'
+import { colors, showError, storeData, useForm } from '../../utils'
 import {Fire} from '../../config'
 
-import { showMessage, hideMessage } from 'react-native-flash-message'
+import { useDispatch } from 'react-redux'
 
 
 const Register = ({navigation}) => {
-    // const [fullName, setFullName] = useState('');
-    // const [profession, setProfession] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
-
-    const [loading, setLoading] = useState(false)
+    const dispatch = useDispatch()
     const [form, setForm] = useForm({
         fullName: '',
         profession: '',
@@ -21,15 +16,11 @@ const Register = ({navigation}) => {
         password: ''
     })
 
-   
-
     const onContinue = () => {
-        console.log(form);
-        
-        setLoading(true)
+        dispatch({type: 'SET_LOADING', value: true})
         Fire.auth().createUserWithEmailAndPassword(form.email, form.password)
-        .then((success) => {
-            setLoading(false)
+        .then(success => {
+            dispatch({type: 'SET_LOADING', value: false})
             setForm('reset')
             const data = {
                 fullName: form.fullName,
@@ -39,42 +30,19 @@ const Register = ({navigation}) => {
             }
             Fire.database().ref('users/' +success.user.uid+ '/')
             .set(data)
-            storeData('user', data);
-            navigation.navigate('UploudPhoto', data);
-           console.log('register success:', success)    
-        })
-        .catch((error) => {
-            const errorMessage= error.message;
-            setLoading(false)
-            showMessage({
-                message: errorMessage,
-                type: 'default',
-                backgroundColor: colors.error,
-                 color: colors.white,
 
-            })
-            console.log('error: ', error)
+            storeData('user', data);
+            navigation.navigate('UploudPhoto', data);  
+        })
+        .catch(err => {
+            dispatch({type: 'SET_LOADING', value: false});
+           showError(err.message)     
         });
 
     }
    
- 
-        // .catch(error => {
-        //     const errorMessage = error.message;
-        //     setLoading(false);
-        //     showMessage({
-        //       message: errorMessage,
-        //       type: 'default',
-        //       backgroundColor: colors.error,
-        //       color: colors.white,
-        //     });
-        //     console.log('error: ', error);
-        //     // ..
-        //   });
-        // }
               
     return (
-        <>
          <View style= {styles.page}>
             <Header onPress= {() => navigation.goBack()} title="Daftar Akun"/>
             <ScrollView showsVerticalScrollIndicator={false}> 
@@ -108,8 +76,6 @@ const Register = ({navigation}) => {
             </View>
             </ScrollView>   
          </View>
-         {loading && <Loading />} 
-        </> 
     )
     }    
 export default Register;

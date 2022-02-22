@@ -3,6 +3,10 @@ import { View, Text, StyleSheet } from 'react-native'
 import { ILNullPhoto } from '../../assets'
 import {Header, Profile, List, Gap} from '../../components'
 import { colors, getData } from '../../utils'
+import {Fire} from '../../config';
+import { showMessage } from 'react-native-flash-message'
+
+
 const UserProfile = ({navigation}) => {
     const [profile, setProfile] = useState({
         fullName: '',
@@ -16,6 +20,22 @@ const UserProfile = ({navigation}) => {
             setProfile(data);
         })
       }, [])
+
+    const signOut = () => {
+        Fire.auth().signOut().then(res => {
+            console.log('success sign out');
+            navigation.replace('GetStarted');
+
+        }).catch(err => {
+            showMessage({
+                message: err.message,
+                type: 'default',
+                backgroundColor: colors.error,
+                color: colors.white
+            })
+        })
+    }
+
     return (
         <View style={styles.page}>
             <Header title="Profile" onPress={() => navigation.goBack()}/>
@@ -44,10 +64,11 @@ const UserProfile = ({navigation}) => {
              icon="rate"
             />
             <List 
-             name="Help Center" 
+             name="Sign Out" 
              desc="Read On Guidlines" 
              type="next" 
              icon="help"
+             onPress={signOut}
             />
         </View>
     )

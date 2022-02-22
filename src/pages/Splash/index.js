@@ -5,17 +5,19 @@ import { colors, fonts } from '../../utils';
 import {Fire} from '../../config'
 const Splash = ({navigation}) => {
     useEffect(() => {
-        setTimeout(() =>{
-            Fire.auth().onAuthStateChanged((user) => {
-                if(user){
-                    console.log('user: ', user);
-                    navigation.replace('MainApp');
-                } else{
+        const unsubscribe = Fire.auth().onAuthStateChanged(user => {
+            setTimeout(() => {
+              if (user) {
+                navigation.replace('MainApp');
+              } else {
+                navigation.replace('GetStarted');
+              }
+            }, 3000);
+          });
 
-                    navigation.replace('GetStarted');
-                }
-            })
-        }, 10000);
+          return () => unsubscribe();
+      
+    
     }, [navigation]);
     return (
         <View style={styles.page}>

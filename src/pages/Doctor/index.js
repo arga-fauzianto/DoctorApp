@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView, StatusBar } from 'react-native'
 import { 
   HomeProfile, 
@@ -8,12 +8,20 @@ import {
   Gap 
 } from '../../components'
 import {JSONCategoryDoctor, DummyDoctor1, DummyDoctor2, DummyDoctor3} from '../../assets'
-import { fonts, colors, getData } from '../../utils'
+import { fonts, colors, getData, showError } from '../../utils'
+import {Fire} from '../../config'
+
 
 const Doctor = ({navigation}) => {
+  const [news, setNews] = useState([])
   useEffect(() => {
-    getData('user').then(res => {
-      console.log(res);
+    Fire.database().ref('news/').once('value').then(res => {
+      console.log('data :', res.val())
+      if(res.val()){
+        setNews(res.val())
+      }
+    }).catch(err => {
+      showError(err.message)
     })
   }, [])
     return (
@@ -58,9 +66,11 @@ const Doctor = ({navigation}) => {
                 />
                 <Text style={styles.sectionLabel}>Good News</Text>
               </View>
-              <NewsItem />
-              <NewsItem />
-              <NewsItem />
+              {news.map(item => {
+                return(
+                  <NewsItem key={item.id} title={item.title} date={item.date} image={item.image}/>
+                )
+              })}
             <Gap height={30} />    
           </View>   
         </ScrollView>

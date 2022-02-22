@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { colors, fonts } from '../../../utils'
 import IconOnly from './IconOnly'
 import BtnIconSend from './BtnIconSend'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
 
 const Button = ({type, title, onPress, icon, disable}) => {
     if(type === 'btn-icon-send') {
